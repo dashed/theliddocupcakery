@@ -15,6 +15,7 @@ const Headline = styled.div`
 
   text-transform: uppercase;
   letter-spacing: 0.25em;
+  margin-right: -.25em;
 
   opacity: 0.8;
 
