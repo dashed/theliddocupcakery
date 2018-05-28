@@ -3,7 +3,7 @@
 // 3rd-party imports
 
 import * as React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 // local imports
 
@@ -33,6 +33,10 @@ const Container = styled.div`
 
 const Video = styled.video`
   ${fullscreen};
+
+  visibility: ${props => props.out ? 'hidden' : 'visible'};
+  animation: ${props => props.out ? fadeOut : fadeIn} 1s linear;
+  transition: visibility 1s linear;
 `;
 
 const PatternBackground = styled.div`
@@ -55,70 +59,123 @@ const ContentContainer = styled.div`
   ${fullscreen};
 `;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+`;
+
 type State = {
-  video_src: string
+  hide_video: boolean
 };
 
 class Hero extends React.Component<{}, State> {
   video = null;
+  video_2 = null;
 
   state = {
-    video_src: 'assets/background.mp4'
+    hide_video: false
   };
 
   constructor(props: {}) {
     super(props);
 
     this.video = React.createRef();
+    this.video_2 = React.createRef();
   }
 
-  setupVideo = () => {
-    if (!this.video) {
+  applyVideo = (video, sideeffect: (HTMLVideoElement) => void) => {
+    if (!video) {
       return;
     }
 
-    const videoDOM = this.video.current;
+    const videoDOM = video.current;
 
     if (!videoDOM) {
       return;
     }
 
-    videoDOM.playbackRate = 0.6;
+    sideeffect(videoDOM);
   };
 
   componentDidMount() {
-    this.setupVideo();
+    this.applyVideo(this.video, videoDOM => {
+      videoDOM.playbackRate = 0.6;
+      videoDOM.play();
+    });
+
+    this.applyVideo(this.video_2, videoDOM => {
+      videoDOM.playbackRate = 0.6;
+      videoDOM.pause();
+    });
   }
 
-  changeVideo = () => {
-    const { video_src } = this.state;
+  hideVideo = (value: boolean) => {
+    this.applyVideo(this.video, videoDOM => {
+      videoDOM.playbackRate = 0.6;
 
-    const new_video_src = video_src === 'assets/background.mp4' ? 'assets/background_2.mp4' : 'assets/background.mp4';
-
-    this.setState(
-      {
-        video_src: new_video_src
-      },
-      () => {
-        this.setupVideo();
+      if(!value) {
+        videoDOM.currentTime = 0;
       }
-    );
+
+      value ? videoDOM.pause() : (videoDOM.play());
+    });
+
+    this.applyVideo(this.video_2, videoDOM => {
+      videoDOM.playbackRate = 0.6;
+
+      if(value) {
+        videoDOM.currentTime = 0;
+      }
+
+      value ? (videoDOM.play()) : videoDOM.pause();
+    });
+
+    this.setState({
+      hide_video: value
+    });
   };
 
   render() {
     return (
       <Container>
         <Video
+          muted
+          playsInline
+          innerRef={this.video_2}
+          onEnded={() => {
+            this.hideVideo(false);
+          }}
+          out={!this.state.hide_video}
+        >
+          <source src="assets/background_2.mp4" type="video/mp4" />
+          {'Your browser does not support HTML5 video.'}
+        </Video>
+        <Video
           autoPlay
           muted
           playsInline
           innerRef={this.video}
           onEnded={() => {
-            this.changeVideo();
+            this.hideVideo(true);
           }}
-          key={this.state.video_src}
+          out={this.state.hide_video}
         >
-          <source src={this.state.video_src} type="video/mp4" />
+          <source src="assets/background.mp4" type="video/mp4" />
           {'Your browser does not support HTML5 video.'}
         </Video>
         <BackgroundColor />

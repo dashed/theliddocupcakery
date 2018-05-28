@@ -15,7 +15,7 @@ const Headline = styled.div`
 
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  margin-right: -.25em;
+  margin-right: -0.25em;
 
   opacity: 0.8;
 
@@ -101,13 +101,13 @@ const Link = styled.a`
   padding: 8px;
   border-radius: 3px;
 
-  box-shadow: 0 2px 20px rgba(4,40,110,0.1);
+  box-shadow: 0 2px 20px rgba(4, 40, 110, 0.1);
 
   transition: box-shadow 350ms ease-out, background-color 350ms ease-out;
 
   &:hover {
     text-decoration: none;
-    box-shadow: 0 10px 30px rgba(4,40,110,0.2);
+    box-shadow: 0 10px 30px rgba(4, 40, 110, 0.2);
     background-color: rgba(255, 222, 235, 0.5);
   }
 `;
