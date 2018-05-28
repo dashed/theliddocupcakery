@@ -115,7 +115,6 @@ class Hero extends React.Component<{}, State> {
   componentDidMount() {
     this.applyVideo(this.video, videoDOM => {
       videoDOM.playbackRate = 0.6;
-      videoDOM.play();
     });
 
     this.applyVideo(this.video_2, videoDOM => {
@@ -172,6 +171,13 @@ class Hero extends React.Component<{}, State> {
           innerRef={this.video}
           onEnded={() => {
             this.hideVideo(true);
+          }}
+          onCanPlay={() => {
+            this.applyVideo(this.video, videoDOM => {
+              if(!this.state.hide_video) {
+                videoDOM.play();
+              }
+            });
           }}
           out={this.state.hide_video}
         >
