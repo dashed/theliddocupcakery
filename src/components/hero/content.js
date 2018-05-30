@@ -79,7 +79,7 @@ const Social = styled.div`
     margin-left: 16px;
   }
 
-  @media screen and (max-width: 350px) {
+  @media screen and (max-width: 390px) {
     display: flex;
     flex-direction: column;
 
