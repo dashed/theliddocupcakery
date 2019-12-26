@@ -36,7 +36,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
-    "lint:js": "eslint src --max-warnings=0"
+    "lint:js": "eslint src --max-warnings=0",
+    "deploy": "netlify deploy"
   },
   "jest": {
     "moduleDirectories": [
@@ -52,6 +53,7 @@
     "flow-annotation-check": "^1.8.1",
     "flow-bin": "^0.73.0",
     "flow-typed": "^2.4.0",
+    "netlify-cli": "^2.25.0",
     "react-app-rewired": "^1.5.2"
   }
 }
